@@ -21,11 +21,11 @@ void sssp(int src){
         auto curr = q.top();
         q.pop();
         if(dist[curr.second]< -curr.first) continue;
-        dist[curr.second]= -curr.first;
 
         for(auto neigh:g[curr.second]){
             if(dist[neigh.first]>dist[curr.second]+neigh.second){//update the distance using priority queue
                 int d = dist[curr.second]+neigh.second;
+                dist[neigh.first]=d;
                 q.push(make_pair(-d,neigh.first));
             }
         }
