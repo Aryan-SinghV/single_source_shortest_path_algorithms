@@ -24,11 +24,12 @@ void dijkstra(int src){
         q.pop();
         if(visited[curr.second]) continue;
         visited[curr.second]=1;
-        dist[curr.second]=-curr.first;
+
         for(auto neigh:g[curr.second]){//make changes to the priority queue
             if(!visited[neigh.first]){
                 int d = dist[curr.second]+neigh.second;
                 if(d<dist[neigh.first]){
+                    dist[neigh.first]=d;
                     q.push(make_pair(-d,neigh.first));
                 }
             }
