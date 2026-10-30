@@ -7,6 +7,8 @@ Dijkstra's algorithm is a greedy graph algorithm that calculates the shortest di
 
 This implementation uses a max-heap priority queue with negative distances to simulate a min-heap, ensuring that the vertex with the smallest tentative distance is processed first.
 
+It follows the lazy priority queue approach, where distances are updated during edge relaxation and outdated priority queue entries are skipped using a visited array.
+
 Algorithm Approach
 
 The implementation follows these steps:
@@ -16,9 +18,9 @@ Initialize the distance of every vertex to infinity (INF).
 Initialize all vertices as unvisited.
 Set the source vertex distance to 0.
 Insert the source vertex into the priority queue.
-Extract the vertex with the smallest distance.
+Extract the vertex with the smallest tentative distance.
 If the vertex has already been visited, skip it.
-Otherwise, mark it as visited and finalize its shortest distance.
+Otherwise, mark it as visited, finalizing its shortest distance.
 Explore all its neighbouring vertices.
 If a neighbour is unvisited and a shorter distance is found, update its distance and insert it into the priority queue.
 Continue until the priority queue becomes empty.
@@ -67,7 +69,7 @@ if(visited[curr.second]) continue;
 visited[curr.second] = 1;
 
 
-This avoids unnecessary repeated processing of vertices.
+This also helps skip outdated entries in the priority queue.
 
 4. Distance Array
 cpp
@@ -86,6 +88,18 @@ The source vertex is initialized with distance zero:
 
 cpp
 dist[src] = 0;
+
+
+Distances are updated during edge relaxation:
+
+cpp
+if(d < dist[neigh.first]){
+    dist[neigh.first] = d;
+    q.push(make_pair(-d, neigh.first));
+}
+
+
+The distance is not updated again when extracting a vertex from the priority queue.
 
 Input Format
 text
@@ -159,8 +173,9 @@ All edge weights must be non-negative.
 This implementation supports undirected weighted graphs.
 The graph can be disconnected.
 Unreachable vertices retain a distance of INF (1e18).
-The algorithm does not support negative edge weights reliably.
+The algorithm does not support negative edge weights reliably, even if there are no negative cycles.
 Negative cycles are not supported by Dijkstra's algorithm.
+Distances are stored using 64-bit integers.
 
 For graphs containing negative edge weights, consider using the Bellman-Ford algorithm.
 
@@ -202,6 +217,7 @@ Graph Type	Undirected Weighted Graph
 Data Structure	Priority Queue (Max-Heap)
 Distance Handling	Negative distances
 Optimization	Visited Array
+Implementation	Lazy Priority Queue
 Edge Weights	Non-negative
 
 Purpose: Implementation and practice of graph algorithms and shortest path techniques in C++.
